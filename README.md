@@ -1,6 +1,6 @@
-#Under contruction 🚧 
+# Under contruction 🚧 
 
-# Modified-Nodal-Analysis
+## Modified-Nodal-Analysis
 DC system Modified Nodal Analysis.
 
 ### General info
