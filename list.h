@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+//#define DEBUG
 #define TYPE(a_var) __typeof__(a_var)
 
 typedef struct Node{
@@ -64,47 +64,69 @@ List* new_List(void* type){
     return list;
 }
 
-void print_list(List* list){
+void print_custom_list(List* list, void (*print_custom_node)(void*)){
     Node* tmp = list->head_node;
-    int count = 0;
     while(tmp != NULL){
-        switch (list->type){
-            case 0:
-                printf("Node(%d): %ld\n", count, (long)tmp->data);
-                break;
-            case 1:
-                printf("Node(%d): %s\n", count, tmp->data);
-                break;
-        }
+        (*print_custom_node)(tmp->data);
         tmp = tmp->next;
-        count++;
     }
-
 }
 
-void print_backwards(List* list){
-    Node* tmp = list->head_node;
-    while(tmp->next != NULL){
-        tmp = tmp->next;
-    }
-    int count = --list->size;
-    // We do not dereference it. Because it contains a value not a reference!!
+void print_backwards_custom_list(List* list, void (*print_custom_node)(void*)){
+    Node* tmp = list->tail_node;
     while(tmp != NULL){
-        switch (list->type){
-            case 0:
-                printf("Node(%d): %ld\n", count, (long)tmp->data);
-                break;
-            case 1:
-                printf("Node(%d): %s\n", count, tmp->data);
-                break;
-        }
+        (*print_custom_node)(tmp->data);
         tmp = tmp->prev;
-        count--;
     }
 }
+
+//void print_list(List* list){
+//    Node* tmp = list->head_node;
+//    int count = 0;
+//    while(tmp != NULL){
+//        switch (list->type){
+//            case 0:
+//                printf("Node(%d): %ld\n", count, (long)tmp->data);
+//                break;
+//            case 1:
+//                printf("Node(%d): %s\n", count, tmp->data);
+//                break;
+//        }
+//        tmp = tmp->next;
+//        count++;
+//    }
+//
+//}
+//
+//void print_backwards(List* list){
+////  TODO: test later!
+////   WTF is this ? lol
+//
+////    Node* tmp = list->head_node;
+////    while(tmp->next != NULL){
+////        tmp = tmp->next;
+////    }
+//    Node* tmp = list->tail_node;
+//    int count = --list->size;
+//    // We do not dereference it. Because it contains a value not a reference!!
+//    while(tmp != NULL){
+//        switch (list->type){
+//            case 0:
+//                printf("Node(%d): %ld\n", count, (long)tmp->data);
+//                break;
+//            case 1:
+//                printf("Node(%d): %s\n", count, tmp->data);
+//                break;
+//        }
+//        tmp = tmp->prev;
+//        count--;
+//    }
+//}
 
 void free_list(List* list){
     Node* tmp = list->head_node;
+    // The list is empty or you lost the head node lol
+    if (tmp == NULL) return;
     while(tmp->next != NULL){
         free(tmp->prev);
         tmp = tmp->next;
@@ -112,7 +134,7 @@ void free_list(List* list){
     free(tmp->prev);
 }
 
-Node* find_node(List* list, void* search_data, int (*compare)(void*, void*) ){
+Node* find_node(List* list, void* search_data, int (*compare)(void*, void*)){
     Node* tmp = list->head_node;
 
     while(tmp != NULL){
@@ -120,7 +142,10 @@ Node* find_node(List* list, void* search_data, int (*compare)(void*, void*) ){
             break;
         tmp = tmp->next;
     }
+
+#ifdef DEBUG
     if(tmp == NULL) printf("\nCouldn't find that element\n");
+#endif
     return tmp;
 }
 
@@ -133,7 +158,11 @@ Node* find_node_with_index(List* list, int index){
         tmp = tmp->next;
         count++;
     }
+
+#ifdef DEBUG
     if(tmp == NULL) printf("\nCouldn't find node based on that index\n");
+#endif
+
     return tmp;
 }
 
@@ -196,10 +225,10 @@ void remove_node(List* list, void* search_data, int (*compare)(void*, void*) ) {
 }
 
 Node* add_list_node(List* list, void* data) {
-    Node *node = (Node*) malloc(sizeof(Node));
+    Node* node = (Node*) malloc(sizeof(Node));
     if (!node) { perror("Malloc failed!\n"); exit(-2); }
 
-    Node *tmp = list->head_node;
+    Node* tmp = list->head_node;
     if(tmp != NULL){
 
         while(tmp->next != NULL)

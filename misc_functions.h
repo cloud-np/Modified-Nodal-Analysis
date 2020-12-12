@@ -28,7 +28,7 @@
 //#define ASKHSH2_PROG3_ASK2_H
 //#endif //ASKHSH2_PROG3_ASK2_H
 
-int printfColored(int color, char* str, ...){
+int printf_colored(int color, char* str, ...){
 
     // arg color here is the return of the printf in the defines.
 
@@ -41,17 +41,79 @@ int printfColored(int color, char* str, ...){
     RESET; // Reset the color.
     return done;
 }
-void printCoords(int* coords){
-    printfColored(ORANGE, "X: ");
-    printfColored(CYAN, "%d  ", coords[0]);
-    printfColored(ORANGE, " Y: ");
-    printfColored(CYAN, "%d\n", coords[1]);
+
+void size_of_spaces(double n, int* spaces){
+
+    int right_spaces = 12;
+    int left_spaces = 3;
+    char res[20];
+    sprintf(res, "%lf", n);
+    res[strlen(res) - 1] = '\0';
+    spaces[0] = left_spaces + (int) strlen(res);
+    spaces[1] = right_spaces - (int) strlen(res);
 }
-int inputInt(int lowerBound, int higherBound){
+
+void print_the_matrix_equation(MatrixEquation* matrix_equation){
+    printf_colored(MAGENTA, "\n\n\t\t\t\t\t\tA ");
+    printf_colored(ORANGE, "x");
+    printf(" = ");
+    printf_colored(CYAN, "B\n\n");
+    for(int i = 0; i < matrix_equation->len_of_arrays; i++){
+        for(int j = 0; j < matrix_equation->len_of_arrays; j++){
+            printf_colored(MAGENTA, "[");
+            int spaces[2];
+            size_of_spaces(matrix_equation->A[i][j], spaces);
+            printf(" %*.3lf%*c ", spaces[0], matrix_equation->A[i][j], spaces[1], ' ');
+            printf_colored(MAGENTA, "]");
+        }
+        printf_colored(ORANGE, "        [");
+        int spaces[2];
+        size_of_spaces(matrix_equation->x[i], spaces);
+        printf(" %*.3lf%*c", spaces[0], matrix_equation->x[i], spaces[1], ' ');
+        printf_colored(ORANGE, "]");
+
+        printf_colored(CYAN, "        [");
+        size_of_spaces(matrix_equation->B[i], spaces);
+        printf(" %*.3lf%*c", spaces[0], matrix_equation->B[i], spaces[1], ' ');
+        printf_colored(CYAN, "]\n");
+    }
+}
+
+void print_custom_node(void* data){
+    NetItem* net_node = (NetItem*) data;
+    printf("Type: ");
+    printf_colored(CYAN, "%s", net_node->type);
+    printf("    High-Node: ");
+    printf_colored(ORANGE, "%s", net_node->left_node);
+    printf("    Low-Node: ");
+    printf_colored(ORANGE, "%s", net_node->right_node);
+    printf("    Value: ");
+    printf_colored(RED, "%lf\n", net_node->value);
+}
+
+void print_hash_table_list(void* data){
+    NodeInfo* node_info = (NodeInfo*) data;
+
+    printf("Node: ");
+    printf_colored(CYAN, "%s", node_info->name);
+    printf("    Main-id: ");
+    printf_colored(ORANGE, "%d", node_info->main_table_pos);
+    printf("    Hash-Table-id: ");
+    printf_colored(ORANGE, "%d\n", node_info->hash_table_pos);
+}
+
+void print_coords(int* coords){
+    printf_colored(ORANGE, "X: ");
+    printf_colored(CYAN, "%d  ", coords[0]);
+    printf_colored(ORANGE, " Y: ");
+    printf_colored(CYAN, "%d\n", coords[1]);
+}
+
+int input_int(int lowerBound, int higherBound){
     int input, count = 0;
 
     do{
-        if(count > 0) printfColored(RED, "Invalid input!\n");
+        if(count > 0) printf_colored(RED, "Invalid input!\n");
         else count++;
         scanf("%d", &input);
     }while(input < lowerBound || input > higherBound);
@@ -59,7 +121,7 @@ int inputInt(int lowerBound, int higherBound){
     return input;
 }
 
-void getSubString(char *target, const char *source, int from, int to){
+void get_sub_string(char *target, const char *source, int from, int to){
     int i, j = 0;
     for(i = from, j = 0; i <= to; i++, j++){
         target[j] = source[i];
