@@ -41,7 +41,6 @@ int main() {
     //FileData* file_data = get_data_from_txt("../dataset/parser_test2.txt", hash_table);
 
 
-
     // A x = B
     MatrixEquation* matrix_equation = initialize_the_matrix_equation(file_data);
     fill_the_matrix(matrix_equation, file_data, hash_table);
