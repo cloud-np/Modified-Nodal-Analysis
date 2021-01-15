@@ -2,6 +2,17 @@
 #define ERGASIAPROSOMOIWSHSKYKLWMATWN_NET_NODE_CLASS_H
 #include "list.h"
 
+// This should be pointing to a val at A table e.g:
+// A[0][3]
+// row: 0
+// col: 3
+
+typedef struct SparseItem{
+    unsigned int row;
+    unsigned int col;
+    double* val;  // Just so we won't be copying the values we point to the existing ones.
+}SparseItem;
+
 typedef struct NetItem {
     //NodeType type;
     char* type;
@@ -23,9 +34,9 @@ typedef struct FileData {
 }FileData;
 
 typedef struct MatrixEquation {
-    float** A;
-    float* x;
-    float* B;
+    double** A;
+    double* x;
+    double* B;
     int len_of_arrays;
 }MatrixEquation;
 
@@ -34,6 +45,26 @@ void free_FileData(FileData* file_data){
     free_list(file_data->nodes_list);
     free_list(file_data->volt_list);
     free(file_data);
+}
+
+SparseItem* create_sparse_table(double** A, int matrix_len, int *sparse_matrix_len){
+    SparseItem* sparse_matrix = (SparseItem*) malloc(sizeof(SparseItem) * matrix_len);
+    if(!sparse_matrix){perror("MALLOC ON sparse matrix A FAILED"); exit(-5);}
+
+    static int pos = 0;
+    for(int i = 0; i < matrix_len; i++){
+        for(int j = 0; j < matrix_len; j++){
+            if (A[i][j] != 0){
+                sparse_matrix[pos].row = i;
+                sparse_matrix[pos].col = j;
+                sparse_matrix[pos].val = &A[i][j];
+                ++pos;
+            }
+        }
+    }
+
+    *sparse_matrix_len = pos;
+    return sparse_matrix;
 }
 
 MatrixEquation* initialize_the_matrix_equation(FileData* file_data){
@@ -52,19 +83,19 @@ MatrixEquation* initialize_the_matrix_equation(FileData* file_data){
     // We use calloc because :
     // The calloc() function then gives all the bits of each element an initial value of 0.
     // https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_73/rtref/calloc.htm
-    float** A = (float**) calloc(len_of_arrays, sizeof(float*));
+    double** A = (double**) calloc(len_of_arrays, sizeof(double*));
     if (!A) {perror("Calloc failed to create A matrix!\n"); exit(-2);}
     for (int i = 0; i < len_of_arrays; i++){
-        A[i] = (float*) calloc(len_of_arrays, sizeof(float));
+        A[i] = (double*) calloc(len_of_arrays, sizeof(double));
         if (!A[i]) {printf("Calloc failed to create A[%d]!\n", i); exit(-2);}
     }
 
     // Initialize the x array
-    float* x = (float*) calloc(len_of_arrays, sizeof(float*));
+    double* x = (double*) calloc(len_of_arrays, sizeof(double*));
     if (!x) {perror("Calloc failed to create x array!\n"); exit(-2);}
 
     // Initialize the B array
-    float* B = (float*) calloc(len_of_arrays, sizeof(float*));
+    double* B = (double*) calloc(len_of_arrays, sizeof(double*));
     if (!B) {perror("Calloc failed to create B array!\n"); exit(-2);}
 
     matrix_equation->A = A;

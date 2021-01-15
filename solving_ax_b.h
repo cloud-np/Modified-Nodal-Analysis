@@ -1,7 +1,7 @@
 //#include "hashing.h"
 
 
-void alter_array_B(float* B, const int* nodes_pos, float net_item_value, char type){
+void alter_array_B(double* B, const int* nodes_pos, float net_item_value, char type){
     int left_node_pos = nodes_pos[0];
     int right_node_pos = nodes_pos[1];
 
@@ -18,7 +18,7 @@ void alter_array_B(float* B, const int* nodes_pos, float net_item_value, char ty
     }
 }
 
-void alter_matrix_A(float** A, const int* nodes_pos, float net_item_value, char type){
+void alter_matrix_A(double** A, const int* nodes_pos, float net_item_value, char type){
     int left_node_pos = nodes_pos[0];
     int right_node_pos = nodes_pos[1];
 
@@ -57,7 +57,7 @@ void alter_matrix_A(float** A, const int* nodes_pos, float net_item_value, char 
     }
 }
 
-void row_operation(float* row, float pivot, int make_this_zero, int len_of_matrix){
+void row_operation(double* row, float pivot, int make_this_zero, int len_of_matrix){
     float crucial_num = row[make_this_zero] / pivot;
     for(int i = 0; i < len_of_matrix; i++){
         row[i] = row[i] - (crucial_num) / pivot;
@@ -66,7 +66,7 @@ void row_operation(float* row, float pivot, int make_this_zero, int len_of_matri
     }
 }
 
-void LU_factor(float** A, int len_of_matrix){
+void LU_factor(double** A, int len_of_matrix){
     // Rows
     //  i =   A[0][0]
     //        A[1][0];
@@ -79,7 +79,8 @@ void LU_factor(float** A, int len_of_matrix){
             row_operation(A[i + 1], A[i][i], j, len_of_matrix);
     }
 }
-void solve_with_LU(float** A, int len_of_matrix){
+
+void solve_with_LU(double** A, int len_of_matrix){
     LU_factor(A, len_of_matrix);
 }
 

@@ -53,6 +53,23 @@ void size_of_spaces(double n, int* spaces){
     spaces[1] = right_spaces - (int) strlen(res);
 }
 
+void print_sparse_matrix(SparseItem* sparse_matrix, const int* matrix_size){
+    printf_colored(CYAN, "\n\n\t\t\t\tSPARSE MATRIX\n");
+    for(int i = 0; i < *matrix_size; i++){
+        printf_colored(MAGENTA, "[");
+        printf_colored(GREEN, "%d", i);
+        printf_colored(MAGENTA, "]");
+        printf_colored(CYAN, " = ");
+        printf_colored(PURPLE, "row ");
+        printf_colored(ORANGE, "%d", sparse_matrix[i].row);
+        printf_colored(PURPLE, " col ");
+        printf_colored(ORANGE, "%d", sparse_matrix[i].col);
+        printf_colored(PURPLE, " val ");
+        printf_colored(ORANGE, "%lf\n" , *sparse_matrix[i].val);
+
+    }
+}
+
 void print_the_matrix_equation(MatrixEquation* matrix_equation){
     printf_colored(MAGENTA, "\n\n\t\t\t\t\t\tA ");
     printf_colored(ORANGE, "x");

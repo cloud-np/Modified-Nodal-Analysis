@@ -1,5 +1,6 @@
-cmake-build-debug
-dataset
-.idea
-.vscode
-build
+cmake-build-debug/
+dataset/
+.idea/
+.vscode/
+build/
+csparse/

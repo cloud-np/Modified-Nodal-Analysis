@@ -3,7 +3,7 @@
 #include "misc_functions.h"
 #include "solving_ax_b.h"
 
-void free_memory(FileData*, MatrixEquation*, List**);
+void free_memory(FileData*, MatrixEquation*, List**, SparseItem*);
 
 int compare(void* search_data, void* data){
     // We do not dereference it !
@@ -44,15 +44,19 @@ int main() {
     // A x = B
     MatrixEquation* matrix_equation = initialize_the_matrix_equation(file_data);
     fill_the_matrix(matrix_equation, file_data, hash_table);
-    solve_with_LU(matrix_equation->A, matrix_equation->len_of_arrays);
+
+    int sparse_matrix_len;
+    SparseItem* sparse_matrix = create_sparse_table(matrix_equation->A, matrix_equation->len_of_arrays, &sparse_matrix_len);
 
     print_the_system(file_data);
+    print_sparse_matrix(sparse_matrix, &sparse_matrix_len);
     print_the_matrix_equation(matrix_equation);
-    free_memory(file_data, matrix_equation, hash_table);
+    free_memory(file_data, matrix_equation, hash_table, sparse_matrix);
     return 0;
 }
 
-void free_memory(FileData* file_data, MatrixEquation* matrix_equation, List** hash_table){
+void free_memory(FileData* file_data, MatrixEquation* matrix_equation, List** hash_table, SparseItem* sparse_matrix){
+    free(sparse_matrix);
     free_FileData(file_data);
     free_HashTable(hash_table);
     free_MatrixEquation(matrix_equation);
