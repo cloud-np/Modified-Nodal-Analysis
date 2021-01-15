@@ -162,7 +162,8 @@ void fill_the_matrix(MatrixEquation* matrix_equation, FileData* file_data, List*
 
         tmp = tmp->next;
     }
-    
+
+    printf("Equation filled successfully!\n");
     // alter_array_B(matrix_equation->B, nodes_pos, net_item->value, 'V');
     // alter_matrix_A(matrix_equation->A, nodes_pos, net_item->value, 'V');
         

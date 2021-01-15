@@ -33,6 +33,7 @@ void print_the_system(FileData* file_data){
 //
 //}
 
+// TODO: Make possible to skip making the A matrix all together.
 int main() {
 
     List** hash_table = new_HashTable();
@@ -42,21 +43,24 @@ int main() {
 
 
     // A x = B
-    MatrixEquation* matrix_equation = initialize_the_matrix_equation(file_data);
+    MatrixEquation* matrix_equation = initialize_the_matrix_equation(file_data, 0);
+    // TODO: This function needs to be altered as well.
     fill_the_matrix(matrix_equation, file_data, hash_table);
 
     int sparse_matrix_len;
-    SparseItem* sparse_matrix = create_sparse_table(matrix_equation->A, matrix_equation->len_of_arrays, &sparse_matrix_len);
+    double arr_density;
+    SparseItem* sparse_arr = create_sparse_arr(matrix_equation->A, matrix_equation->len_of_arrays,
+                                               &sparse_matrix_len, &arr_density);
 
     print_the_system(file_data);
-    print_sparse_matrix(sparse_matrix, &sparse_matrix_len);
-    print_the_matrix_equation(matrix_equation);
-    free_memory(file_data, matrix_equation, hash_table, sparse_matrix);
+    print_sparse_arr(sparse_arr, &sparse_matrix_len);
+    print_the_matrix_equation(matrix_equation, &arr_density);
+    free_memory(file_data, matrix_equation, hash_table, sparse_arr);
     return 0;
 }
 
-void free_memory(FileData* file_data, MatrixEquation* matrix_equation, List** hash_table, SparseItem* sparse_matrix){
-    free(sparse_matrix);
+void free_memory(FileData* file_data, MatrixEquation* matrix_equation, List** hash_table, SparseItem* sparse_arr){
+    free(sparse_arr);
     free_FileData(file_data);
     free_HashTable(hash_table);
     free_MatrixEquation(matrix_equation);

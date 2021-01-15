@@ -53,7 +53,12 @@ void size_of_spaces(double n, int* spaces){
     spaces[1] = right_spaces - (int) strlen(res);
 }
 
-void print_sparse_matrix(SparseItem* sparse_matrix, const int* matrix_size){
+void print_matrix_density(const double arr_density){
+    printf_colored(GREEN, "Array density: ");
+    printf_colored(RED, "%.2lf\n", arr_density);
+}
+
+void print_sparse_arr(SparseItem* sparse_matrix, const int* matrix_size){
     printf_colored(CYAN, "\n\n\t\t\t\tSPARSE MATRIX\n");
     for(int i = 0; i < *matrix_size; i++){
         printf_colored(MAGENTA, "[");
@@ -70,11 +75,12 @@ void print_sparse_matrix(SparseItem* sparse_matrix, const int* matrix_size){
     }
 }
 
-void print_the_matrix_equation(MatrixEquation* matrix_equation){
+void print_the_matrix_equation(MatrixEquation* matrix_equation, const double* arr_density){
     printf_colored(MAGENTA, "\n\n\t\t\t\t\t\tA ");
     printf_colored(ORANGE, "x");
     printf(" = ");
-    printf_colored(CYAN, "B\n\n");
+    printf_colored(CYAN, "B\n");
+    print_matrix_density(*arr_density);
     for(int i = 0; i < matrix_equation->len_of_arrays; i++){
         for(int j = 0; j < matrix_equation->len_of_arrays; j++){
             printf_colored(MAGENTA, "[");

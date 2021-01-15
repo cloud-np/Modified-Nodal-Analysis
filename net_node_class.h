@@ -47,27 +47,30 @@ void free_FileData(FileData* file_data){
     free(file_data);
 }
 
-SparseItem* create_sparse_table(double** A, int matrix_len, int *sparse_matrix_len){
-    SparseItem* sparse_matrix = (SparseItem*) malloc(sizeof(SparseItem) * matrix_len);
-    if(!sparse_matrix){perror("MALLOC ON sparse matrix A FAILED"); exit(-5);}
+SparseItem* create_sparse_arr(double** A, int matrix_len, int* sparse_arr_len, double* arr_density){
+    SparseItem* sparse_arr = (SparseItem*) malloc(sizeof(SparseItem) * matrix_len);
+    if(!sparse_arr){perror("MALLOC ON sparse matrix A FAILED"); exit(-5);}
 
-    static int pos = 0;
+    int pos = 0;
     for(int i = 0; i < matrix_len; i++){
         for(int j = 0; j < matrix_len; j++){
             if (A[i][j] != 0){
-                sparse_matrix[pos].row = i;
-                sparse_matrix[pos].col = j;
-                sparse_matrix[pos].val = &A[i][j];
+                sparse_arr[pos].row = i;
+                sparse_arr[pos].col = j;
+                sparse_arr[pos].val = &A[i][j];
                 ++pos;
             }
         }
     }
-
-    *sparse_matrix_len = pos;
-    return sparse_matrix;
+    *arr_density = ((double)pos / (matrix_len * matrix_len)) * 100;
+    printf("Sparse Array is ready with density: (%d / %d) * 100 = %.2lf\n", pos, (matrix_len * matrix_len), *arr_density);
+    *sparse_arr_len = pos;
+    return sparse_arr;
 }
 
-MatrixEquation* initialize_the_matrix_equation(FileData* file_data){
+// TODO: Use skip_A_matrix to "dynamically" choose whether you simple gonna skip making the A matrix
+//       in general or you gonna make it. ( in case of big data you should always skip making the A_matrix).
+MatrixEquation* initialize_the_matrix_equation(FileData* file_data, short skip_A_matrix){
     int n = file_data->nodes_list->size;
     int m2 = file_data->volt_list->size;
 
@@ -103,6 +106,7 @@ MatrixEquation* initialize_the_matrix_equation(FileData* file_data){
     matrix_equation->B = B;
     matrix_equation->len_of_arrays = len_of_arrays;
 
+    printf("Matrix equation Ax = B is initialized\n");
 
     return matrix_equation;
 }
