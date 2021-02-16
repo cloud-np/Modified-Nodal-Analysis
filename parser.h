@@ -106,7 +106,7 @@ FileData* get_data_from_txt(char* file_path, List** hash_table){
     List* volt_list = new_List("NetItem");
 
     fp = fopen(file_path, "r");
-    if (fp == NULL) {perror("Opening the file failed"); exit(-1);}
+    if (fp == NULL) {perror("Can't open given file or it failed!"); exit(-1);}
 
     NetItem* new_item = (NetItem*) malloc(sizeof(NetItem));
     if (!new_item) {perror("Malloc failed for new_item!\n"); exit(-2);}

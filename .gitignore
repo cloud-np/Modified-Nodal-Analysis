@@ -4,3 +4,5 @@ dataset/
 .vscode/
 build/
 csparse/
+*.out
+csparse.*

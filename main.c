@@ -2,6 +2,7 @@
 #include "parser.h"
 #include "misc_functions.h"
 #include "solving_ax_b.h"
+#include "csparse.h"
 
 void free_memory(FileData*, MatrixEquation*, List**, SparseItem*);
 
@@ -33,13 +34,14 @@ void print_the_system(FileData* file_data){
 //
 //}
 
-// TODO: Make possible to skip making the A matrix all together.
+//  SOS DO THIS FIRST!!!!!!!!!!!!!
+// TODO:
+//      1) Add the csparse library.
+//      2) Add a debug/printing mode.
 int main() {
 
     List** hash_table = new_HashTable();
-    FileData* file_data = get_data_from_txt("../dataset/test.txt", hash_table);
-    //FileData* file_data = get_data_from_txt("../dataset/ibmpg1.spice.txt", hash_table);
-    //FileData* file_data = get_data_from_txt("../dataset/parser_test2.txt", hash_table);
+    FileData* file_data = get_data_from_txt("./dataset/final_test.txt", hash_table);
 
 
     // A x = B
