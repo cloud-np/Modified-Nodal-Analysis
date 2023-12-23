@@ -16,12 +16,9 @@ For more information: [MNA](https://lpsa.swarthmore.edu/Systems/Electrical/mna/M
 ### Setup
 To run download the project and use the ```test.txt``` file.
 
-```
+```c
 int main() {
- ...
- 
     FileData* file_data = get_data_from_txt("../dataset/test.txt", hash_table);
- 
  ...
 }
 ```
